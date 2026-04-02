@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#4a6cf7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Track days until or since your important events">
+  <title>Days Track</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon-192.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <h1>Days Track</h1>
+    <div class="header-actions">
+      <button class="icon-btn" id="btn-settings" aria-label="Settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main">
+    <div id="events-container"></div>
+  </main>
+
+  <!-- FAB -->
+  <button class="fab" id="fab" aria-label="Add event">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+    </svg>
+  </button>
+
+  <!-- Add/Edit Modal -->
+  <div class="overlay" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <h2 id="modal-title">New Event</h2>
+      <div class="form-group">
+        <label for="input-title">Title</label>
+        <input type="text" id="input-title" placeholder="Event name" autocomplete="off" maxlength="100">
+      </div>
+      <div class="form-group">
+        <label for="input-desc">Description (optional)</label>
+        <textarea id="input-desc" placeholder="Add some details..." rows="3" maxlength="500"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="input-date">Date</label>
+        <input type="date" id="input-date">
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+        <button class="btn btn-primary" id="modal-save">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Event Detail View -->
+  <div class="detail-view" id="detail-view">
+    <header class="detail-header">
+      <button class="icon-btn" id="detail-back" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <span style="font-weight:600">Event Details</span>
+    </header>
+    <div class="detail-body">
+      <div class="detail-count" id="detail-count">
+        <div class="number" id="detail-number"></div>
+        <div class="label" id="detail-label"></div>
+      </div>
+      <h2 class="detail-title" id="detail-title"></h2>
+      <p class="detail-date" id="detail-date"></p>
+      <div class="detail-description" id="detail-description"></div>
+      <div class="detail-logs" id="detail-logs"></div>
+      <div class="detail-actions">
+        <button class="btn btn-secondary" id="detail-edit">Edit</button>
+        <button class="btn btn-danger" id="detail-delete">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings View -->
+  <div class="settings-view" id="settings-view">
+    <header class="detail-header">
+      <button class="icon-btn" id="settings-back" aria-label="Back">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="15 18 9 12 15 6"/>
+        </svg>
+      </button>
+      <span style="font-weight:600">Settings</span>
+    </header>
+    <div class="settings-body">
+      <div class="setting-item">
+        <div>
+          <div class="setting-label">Dark Mode</div>
+          <div class="setting-desc">Toggle dark theme</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="theme-toggle">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="setting-item">
+        <div>
+          <div class="setting-label">Export Events</div>
+          <div class="setting-desc">Download events as JSON</div>
+        </div>
+        <button class="btn btn-secondary" id="btn-export">Export</button>
+      </div>
+      <div class="setting-item">
+        <div>
+          <div class="setting-label">Import Events</div>
+          <div class="setting-desc">Load events from a JSON file</div>
+        </div>
+        <button class="btn btn-secondary" id="btn-import">Import</button>
+      </div>
+      <div class="setting-item">
+        <div>
+          <div class="setting-label">Clear All Data</div>
+          <div class="setting-desc">Delete all events permanently</div>
+        </div>
+        <button class="btn btn-danger" id="btn-clear">Clear</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Dialog -->
+  <div class="confirm-overlay" id="confirm-overlay">
+    <div class="confirm-dialog">
+      <h3 id="confirm-title"></h3>
+      <p id="confirm-message"></p>
+      <div class="confirm-actions">
+        <button class="btn btn-secondary" id="confirm-no">Cancel</button>
+        <button class="btn btn-danger" id="confirm-yes">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="db.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
